@@ -1,0 +1,250 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    /* LIGHT MODE - Clinical Laboratory Aesthetic */
+    /* Soft grey background to reduce eye strain */
+    --background: 210 20% 98%;        /* #f8fafc - gray-50 */
+    --foreground: 222 47% 11%;        /* #0f172a - slate-900 */
+    
+    /* Pure white cards with subtle borders */
+    --card: 0 0% 100%;                /* #ffffff - white */
+    --card-foreground: 222 47% 11%;   /* #0f172a - slate-900 */
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    /* Emerald primary for light mode readability */
+    --primary: 160 84% 39%;           /* #059669 - emerald-600 */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 214 32% 91%;         /* #e2e8f0 - slate-200 */
+    --secondary-foreground: 222 47% 11%;
+    
+    --muted: 210 40% 96%;             /* #f1f5f9 - slate-100 */
+    --muted-foreground: 215 16% 47%;  /* #64748b - slate-600 */
+    
+    /* Emerald accent */
+    --accent: 160 84% 39%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* Red destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Light grey borders */
+    --border: 214 32% 91%;            /* #e2e8f0 - slate-200 */
+    --input: 214 32% 91%;
+    
+    /* Emerald ring */
+    --ring: 160 84% 39%;
+    
+    /* Chart colors - muted for light mode */
+    --chart-1: 160 84% 39%;   /* Emerald #059669 */
+    --chart-2: 0 84% 60%;     /* Red #ef4444 */
+    --chart-3: 38 92% 50%;    /* Amber #f59e0b */
+    --chart-4: 199 89% 48%;   /* Cyan #0ea5e9 */
+    --chart-5: 258 90% 66%;   /* Purple #a855f7 */
+    
+    --radius: 0.5rem;
+  }
+  
+  .dark {
+    /* DARK MODE - Cyber Brutalist */
+    /* Pure black background */
+    --background: 0 0% 4%;            /* #09090b */
+    --foreground: 0 0% 95%;
+    
+    /* Cards with thin borders */
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 95%;
+    
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 95%;
+    
+    /* Neon Green Primary (#00ff41) */
+    --primary: 142 100% 50%;
+    --primary-foreground: 0 0% 2%;
+    
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 95%;
+    
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 55%;
+    
+    /* Neon Green Accent */
+    --accent: 142 100% 50%;
+    --accent-foreground: 0 0% 2%;
+    
+    /* Neon Red Destructive (#ff0055) */
+    --destructive: 338 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Thin zinc borders */
+    --border: 0 0% 16%;
+    --input: 0 0% 14%;
+    
+    /* Neon Green Ring */
+    --ring: 142 100% 50%;
+    
+    /* Chart colors - Neon palette */
+    --chart-1: 142 100% 50%;   /* Green #00ff41 */
+    --chart-2: 338 100% 50%;   /* Red #ff0055 */
+    --chart-3: 45 100% 50%;    /* Amber #ffaa00 */
+    --chart-4: 193 100% 50%;   /* Cyan #00d4ff */
+    --chart-5: 270 100% 67%;   /* Purple #aa55ff */
+    
+    --radius: 0px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    /* Increase base zoom for better readability */
+    font-size: 112.5%; /* 18px base instead of 16px */
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  /* Monospace for data/numbers */
+  .font-mono {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Adaptive scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-zinc-700;
+  border: none;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-emerald-600 dark:bg-cyber-green;
+}
+
+/* Neon glow utilities */
+.glow-green {
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.6);
+}
+.glow-cyan {
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+}
+.glow-red {
+  text-shadow: 0 0 10px rgba(255, 0, 85, 0.6);
+}
+.glow-amber {
+  text-shadow: 0 0 10px rgba(255, 170, 0, 0.6);
+}
+.glow-purple {
+  text-shadow: 0 0 10px rgba(170, 85, 255, 0.6);
+}
+
+.border-glow-green {
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.2);
+}
+.border-glow-cyan {
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.2);
+}
+.border-glow-red {
+  box-shadow: 0 0 8px rgba(255, 0, 85, 0.2);
+}
+
+/* Cyber brutalist text styles */
+.text-cyber-green {
+  color: #00ff41;
+}
+.text-cyber-cyan {
+  color: #00d4ff;
+}
+.text-cyber-red {
+  color: #ff0055;
+}
+.text-cyber-amber {
+  color: #ffaa00;
+}
+.text-cyber-purple {
+  color: #aa55ff;
+}
+
+.bg-cyber-green {
+  background-color: #00ff41;
+}
+.bg-cyber-cyan {
+  background-color: #00d4ff;
+}
+.bg-cyber-red {
+  background-color: #ff0055;
+}
+.bg-cyber-amber {
+  background-color: #ffaa00;
+}
+.bg-cyber-purple {
+  background-color: #aa55ff;
+}
+
+/* Border utilities */
+.border-cyber-green {
+  border-color: #00ff41;
+}
+.border-cyber-cyan {
+  border-color: #00d4ff;
+}
+.border-cyber-red {
+  border-color: #ff0055;
+}
+.border-cyber-amber {
+  border-color: #ffaa00;
+}
+.border-cyber-purple {
+  border-color: #aa55ff;
+}
+
+/* Recharts customization */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: hsl(0 0% 16%);
+  stroke-dasharray: 3 3;
+}
+
+.recharts-text {
+  fill: hsl(0 0% 55%);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Remove default chart animations for brutalist feel */
+.recharts-surface {
+  overflow: visible;
+}
+
+/* Mental Overdrive Error Animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+  20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+

@@ -1,0 +1,171 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  
+  subjects    Subject[]
+  simulations Simulation[]
+  errors      QuestionError[]
+  essays      Essay[]
+  dailyLogs   DailyLog[]
+  studySessions StudySession[]
+}
+
+// --- CORE INTELLECTUAL ---
+model Subject {
+  id        String   @id @default(uuid())
+  userId    String
+  name      String   // e.g. "Física"
+  color     String   // Hex code
+  topics    Topic[]
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@map("subjects")
+}
+
+model Topic {
+  id             String      @id @default(uuid())
+  subjectId      String
+  name           String      // e.g. "Termodinâmica"
+  difficultyLevel Int        @default(1)
+  isWallOfStone  Boolean     @default(false) // Locked topics
+  status         TopicStatus @default(TODO)
+  incidence      IncidenceLevel @default(MEDIUM) // How often it appears in exams
+  unlockProgress Int        @default(0)      // 0-100% progress to unlock
+  
+  errors         QuestionError[]
+  sessions       StudySession[]
+  subject        Subject     @relation(fields: [subjectId], references: [id])
+  
+  @@map("topics")
+}
+
+enum TopicStatus {
+  TODO
+  IN_PROGRESS
+  MASTERED
+}
+
+enum IncidenceLevel {
+  LOW
+  MEDIUM
+  HIGH
+  VERY_HIGH
+}
+
+// --- TIME TRACKING ---
+model StudySession {
+  id              String   @id @default(uuid())
+  userId          String
+  topicId         String
+  durationMinutes Int
+  date            DateTime @default(now())
+  
+  topic           Topic    @relation(fields: [topicId], references: [id])
+  user            User     @relation(fields: [userId], references: [id])
+  
+  @@map("study_sessions")
+}
+
+// --- SIMULADOS (Historical Performance) ---
+model Simulation {
+  id          String   @id @default(uuid())
+  userId      String
+  date        DateTime @default(now())
+  name        String   // e.g. "FUVEST 2024"
+  score       Int      // Acertos Totais (ex: 72/90)
+  
+  // Scores by subject area (Brazilian vestibular format)
+  mathScore   Int?     // Matemática (0-45)
+  natScore    Int?     // Natureza (0-45)  
+  humScore    Int?     // Humanas (0-45)
+  linScore    Int?     // Linguagens (0-45)
+  timeInMinutes Int?   // Tempo de prova em minutos
+  
+  errors      QuestionError[]
+  user        User     @relation(fields: [userId], references: [id])
+  
+  @@map("simulations")
+}
+
+// --- REDAÇÃO (Essays) ---
+model Essay {
+  id            String   @id @default(uuid())
+  userId        String
+  date          DateTime @default(now())
+  title         String
+  totalScore    Int      // 0-1000
+  timeInMinutes Int?     // Tempo de prova em minutos
+  // Competencies Breakdown
+  c1            Int?
+  c2            Int?
+  c3            Int?
+  c4            Int?
+  c5            Int?
+  
+  user          User     @relation(fields: [userId], references: [id])
+  
+  @@map("essays")
+}
+
+// --- ERROR SNIPER ---
+model QuestionError {
+  id           String    @id @default(uuid())
+  userId       String
+  simulationId String?   
+  topicId      String    
+  
+  // Taxonomy
+  errorType    ErrorType 
+  description  String    
+  correction   String    
+  date         DateTime  @default(now())
+  
+  // Spaced Repetition
+  nextReview   DateTime  @default(now())
+  reviewCount  Int       @default(0)
+  archived     Boolean   @default(false)
+  
+  user         User       @relation(fields: [userId], references: [id])
+  simulation   Simulation? @relation(fields: [simulationId], references: [id])
+  topic        Topic      @relation(fields: [topicId], references: [id])
+  
+  @@map("question_errors")
+}
+
+enum ErrorType {
+  THEORY          // Lacuna Teórica
+  INTERPRETATION  // Interpretação
+  ATTENTION       // Desatenção
+  TIME            // Tempo
+  EMOTIONAL       // Emocional
+}
+
+// --- RITUAL BEAST MODE ---
+model DailyLog {
+  id             String   @id @default(uuid())
+  userId         String
+  date           DateTime @default(now())
+  
+  // VOLUME METRIC
+  questionsCount Int      @default(0) 
+  
+  // HABITS CHECKLIST
+  sleepOk        Boolean  @default(false)
+  workoutOk      Boolean  @default(false)
+  cleanDiet      Boolean  @default(false)
+  noSocialMedia  Boolean  @default(false)
+  
+  user           User     @relation(fields: [userId], references: [id])
+  
+  @@map("daily_logs")
+}
